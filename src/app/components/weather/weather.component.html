@@ -1,0 +1,57 @@
+<div class="weather-container">
+  <div class="search-bar">
+    <mat-form-field class="custom-input">
+      <mat-label>Search Location</mat-label>
+      <input id="searchInput" type="text" matInput placeholder="Enter a location" [formControl]="searchInputControl"
+        [matAutocomplete]="auto" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
+      <mat-option *ngFor="let result of searchResults$ | async" [value]="result" class="option-name">
+        {{ result?.LocalizedName }}
+      </mat-option>
+    </mat-autocomplete>
+  </div>
+
+  <div *ngIf="weatherData$ | async as weatherData" class="weather-card">
+    <div class="weather-info">
+      <div class="city-details">
+        <h1>{{ cityName }}</h1>
+        <ng-container *ngIf="showCelsius; else showFarenheit" class="temperature">
+          <div class="heat">
+            {{ weatherData?.Temperature?.Metric?.Value + ' ' +
+            weatherData?.Temperature?.Metric?.Unit }}°
+          </div>
+        </ng-container>
+        <ng-template #showFarenheit class="temperature">
+          <div class="heat">
+            {{ weatherData?.Temperature?.Imperial?.Value + ' ' +
+            weatherData?.Temperature?.Imperial?.Unit}}°
+          </div>
+        </ng-template>
+      </div>
+      <div class="buttons">
+        <div class="favorite-button">
+          <mat-icon mat-icon-button matTooltip="add/remove" (click)="toggleFavorite(weatherData)">favorite</mat-icon>
+        </div>
+        <mat-icon mat-icon-button matTooltip="change unit" (click)="toggleTemperatureUnit()"
+          class="material-symbols-outlined">
+          device_thermostat
+        </mat-icon>
+      </div>
+    </div>
+
+
+
+    <div></div>
+    <div class="forecast" *ngIf="fiveDayForecast$ | async as fiveDayForecast">
+      <div class="forecast-card" *ngFor="let day of fiveDayForecast?.DailyForecasts">
+        <div class="day">{{ day?.Date | date:'EEEE' }}</div>
+        <span class="temperature">{{ day?.Temperature?.Minimum?.Value | tempConverter:showCelsius}}°</span>
+        -
+        <span class="temperature">{{ day?.Temperature?.Maximum?.Value | tempConverter:showCelsius}}°</span>
+      </div>
+    </div>
+  </div>
+</div>

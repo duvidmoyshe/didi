@@ -1,0 +1,17 @@
+  <ng-container *ngIf="favoriteCities$ | async as favoriteCities">
+    <div class="favorites-container" *ngIf="favoriteCities.length > 0; else noData">
+      <div *ngFor="let favorite of favoriteCities"
+      (click)="navigateToWeatherDetails(favorite)">
+        <mat-card class="favorite-card">
+          <mat-card-content matTooltip="get full weather" >
+            <h3 class="favorite-weather">{{ favorite?.weatherData?.Temperature?.Metric?.Value + ' ' +
+              favorite.weatherData?.Temperature?.Metric?.Unit }}°</h3>
+            <p class="favorite-name">{{ favorite?.favoriteName }}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #noData>
+    no favorites chosen yet!
+  </ng-template>

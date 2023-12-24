@@ -6,9 +6,8 @@ import { LocationState, LocationStore } from './location.store';
   providedIn: 'root',
 })
 
-export class LocationService extends NgEntityService<LocationState> {
+export class LocationService {
 
-  constructor(protected override store: LocationStore) {
-    super(store);
+  constructor(private store: LocationStore) {
   }
 }
